@@ -143,15 +143,31 @@ mysqli_close($conexao);
 			</tr>
 
 			<?php while($exibirAtividade = mysqli_fetch_array($consulta)){ ?>
+				<?php
+				$id_lugar = $exibirAtividade['id_lugar'];
+                $sql_lugar = "SELECT * FROM ta_local WHERE id = $id_lugar";
+				$resultado = mysqli_query($conexao, $sql_lugar);
+
+				$id_convidado = $exibirAtividade['id_palestrante'];
+                $sql_convidado = "SELECT * FROM ta_convidado WHERE id = $id_convidado";
+				$resultado_con = mysqli_query($conexao, $sql_convidado);								
+				?>
+
 				<tr>
 					<td><?php echo $exibirAtividade["id_ati"];?></td>
 					<td><?php echo $exibirAtividade["nome"];?></td>
-					<td><?php echo $exibirAtividade["id_lugar"];?></td>
+					<td><?php while ($rows_lu = mysqli_fetch_array($resultado)) {
+						echo $rows_lu['nome'];
+					}?>
+					</td>
 					<td><?php echo date ("d/m/y", strtotime ($exibirAtividade["dia"]));?></td>					
 					<td><?php echo $exibirAtividade["horaini"];?></td>
 					<td><?php echo $exibirAtividade["horafim"];?></td>
 					<td><?php echo $exibirAtividade["carga"];?></td>
-					<td><?php echo $exibirAtividade["id_palestrante"];?></td>
+					<td><?php while ($rows_pale = mysqli_fetch_array($resultado_con)) {
+						echo $rows_pale['nome'];
+					}?>
+					</td>
 					<td><?php if ($exibirAtividade['valor']==0) {
 						echo "Grátis";
 					}else {
@@ -161,6 +177,7 @@ mysqli_close($conexao);
 					</td>
 				</tr>
 			<?php } ?>
+
 		</table>
 	</div>
 
